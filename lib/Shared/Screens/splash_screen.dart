@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:proscan/Core/Routing/routes.dart';
 import 'package:proscan/Core/Themes/app_themes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,7 +19,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _navigateToNextPage() async {
     Future.delayed(const Duration(seconds: 4), () {
-      /////////////////////////////////
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, AppRoutes.startUp);
+      } else {
+        return;
+      }
     });
   }
 
