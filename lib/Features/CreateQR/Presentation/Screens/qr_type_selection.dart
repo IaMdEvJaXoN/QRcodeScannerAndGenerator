@@ -124,12 +124,7 @@ class QrTypeSelectionScreen extends StatelessWidget {
 
     return Scaffold(
       //No issue in returning this scaffold because the one in appshell only claims the bottomNavigationBar
-      //backgroundColor: AppThemes.background,
       appBar: AppBar(
-        // leading: IconButton(
-        //   onPressed: () {},
-        //   icon: const Icon(Icons.arrow_back_rounded),
-        // ),
         title: Text(
           'Create QR Code',
           style: textTheme.titleLarge?.copyWith(

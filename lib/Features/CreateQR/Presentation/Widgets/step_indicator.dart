@@ -10,7 +10,7 @@ class QrGenerationStepIndicator extends StatelessWidget {
     'Choose Type',
     'Enter Details',
     'Generate QR',
-    'Save / Share',
+    'Copy/Share',
   ];
 
   @override

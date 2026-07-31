@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,7 @@ import 'package:proscan/Features/ScanQR/Presentation/Screens/scan_result.dart';
 import 'package:proscan/Features/ScanQR/Presentation/Widgets/scan_qr_page_widgets/scanner_overlay.dart';
 import 'package:proscan/Features/ScanQR/Presentation/Widgets/scan_qr_page_widgets/top_bar.dart';
 import 'package:proscan/Features/ScanQR/Presentation/Widgets/scan_qr_page_widgets/zoom_control.dart';
+import 'package:proscan/Features/Settings/Presentation/Providers/beep_notifier.dart';
 
 class ScannerScreen extends ConsumerStatefulWidget {
   const ScannerScreen({super.key});
@@ -24,16 +26,19 @@ class ScannerScreen extends ConsumerStatefulWidget {
 
 class _ScannerScreenState extends ConsumerState<ScannerScreen> {
   late final MobileScannerController _mobileScannerController;
+  late AudioPlayer _player;
   bool hasScanned = false;
   @override
   void initState() {
     super.initState();
     _mobileScannerController = MobileScannerController();
+    _player = AudioPlayer();
   }
 
   @override
   void dispose() {
     _mobileScannerController.dispose();
+    _player.dispose();
     super.dispose();
   }
 
@@ -49,10 +54,18 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
     if (rawValue == null) {
       return;
     } else {
+      final isBeepEnabled = ref.read(beepProvider);
+      if (isBeepEnabled) {
+        playBeep();
+      }
       _mobileScannerController
           .stop(); //To minimise power wastage-Stopping the continuous scanning
       _handleDecodedValue(rawValue);
     }
+  }
+
+  Future<void> playBeep() async {
+    await _player.play(AssetSource('sounds/click.mp3'));
   }
 
   void _handleDecodedValue(String rawValue) {
@@ -121,7 +134,6 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
       }
     });
     hasScanned = ref.watch(hasScannedProvider);
-
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -171,8 +183,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
                         debugPrint('$e');
                       }
                     },
-                    onManualEntryPressed: () {
-                    },
+                    onManualEntryPressed: () {},
                   );
                 },
               ),

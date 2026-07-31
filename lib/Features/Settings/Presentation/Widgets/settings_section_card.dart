@@ -34,7 +34,7 @@ class SettingsSectionCard extends StatelessWidget {
               children: List.generate(children.length * 2 - 1, (index) {
                 if (index.isOdd) {
                   return Divider(
-                    color: AppThemes.outline.withValues(alpha: 0.5),
+                    color: Colors.blueGrey,
                     height: 1,
                   );
                 }

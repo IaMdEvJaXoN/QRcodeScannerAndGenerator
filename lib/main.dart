@@ -19,13 +19,16 @@ void main() async {
 
   await Hive.openBox<ScanModel>(AdapterNames.scanHistoryBoxName);
   await Hive.openBox<GeneratedQrModel>(AdapterNames.generatedQrsHistoryBoxName);
-
-  runApp(ProviderScope(child: ProScanApp()));
+  runApp(
+    ProviderScope(
+      //overrides: [sharedPrefsClassProvider.overrideWithValue(SharedPrefs(prefs: prefs))],
+      child: ProScanApp(),
+    ),
+  );
 }
 
 class ProScanApp extends StatelessWidget {
   const ProScanApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

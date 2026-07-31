@@ -3,8 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:proscan/Core/Routing/routes.dart';
 import 'package:proscan/Core/Themes/app_themes.dart';
+import 'package:proscan/Core/Utils/homescreen_utils/greetings_determiner.dart';
+import 'package:proscan/Core/Utils/homescreen_utils/homescreen_animation.dart';
+import 'package:proscan/Core/Utils/homescreen_utils/homescreen_text.dart';
 import 'package:proscan/Core/Utils/scanQr_utils/scan_ui_mapper.dart';
 import 'package:proscan/Core/Utils/shared_utils/navigation_bar_index.dart';
+import 'package:proscan/Features/HomeScreen/Presentation/Providers/greetings_notifier.dart';
+import 'package:proscan/Features/HomeScreen/Presentation/Providers/random_text_timer_provider.dart';
 import 'package:proscan/Features/HomeScreen/Presentation/Widgets/feature_card.dart';
 import 'package:proscan/Features/HomeScreen/Presentation/Widgets/recent_scan_card.dart';
 import 'package:proscan/Features/ScanQR/Presentation/Providers/History_screen_Notifier/history_screen_providers.dart';
@@ -18,12 +23,19 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  String greeting = "";
+  String getGreetingToDisplay(DateTime currentTime) {
+    return GreetingsDeterminer.determineGreeting(currentTime);
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     ref.watch(selectedIndexProvider);
     final scanHistory = ref.watch(scannerHistoryScreenProvider);
     final navigationIndexReader = ref.read(selectedIndexProvider.notifier);
+    final currentDateTime = ref.watch(greetingsProvider);
+    final currentDateAndTime = ref.watch(randomTextProvider);
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -57,19 +69,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ],
             ),
             const SizedBox(height: 24),
-            Text(
-              'Good Morning',
-              style: textTheme.headlineMedium?.copyWith(
-                color: AppThemes.primaryText,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        getGreetingToDisplay(currentDateTime),
+                        style: textTheme.headlineMedium?.copyWith(
+                          color: AppThemes.primaryText,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        HomescreenText.getText(currentDateAndTime),
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: AppThemes.secondaryText,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                //const SizedBox(width: 3),
+                Expanded(child: HomescreenAnimation.getAnimation(currentDateAndTime)),
+              ],
             ),
-            const SizedBox(height: 4),
-            Text(
-              'What would you like to do today?',
-              style: textTheme.bodyMedium?.copyWith(
-                color: AppThemes.secondaryText,
-              ),
-            ),
+
             const SizedBox(height: 24),
             const FeatureCard(
               icon: Icons.qr_code_scanner_rounded,
@@ -133,12 +160,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 }
 
                 return ListView.builder(
+                  shrinkWrap:
+                      true, //The widget to sixe itself to fit its content rather than trying to fit in the space provided by the parent widget.
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: history.length,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
                     final data = history[index];
-                    //Displaying 4recent scans
-                    if (index < history.length && index <= 4) {
+                    //Displaying 4 recent scans
+                    if (index < history.length && index <= 3) {
                       return RecentScanCard(
                         icon: ScanResultUiMapper.primaryActionIcon(
                           data.contentType,

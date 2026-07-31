@@ -26,6 +26,8 @@ class GenerateQrScreen extends ConsumerStatefulWidget {
 class _GenerateQrScreenState extends ConsumerState<GenerateQrScreen> {
   Map<String, String> _fieldValues = {};
   String? _generatedContent;
+  int _currentStep =
+      1; //The first step on this particular screen is the second step globally in the step indicator.
 
   void _handleGenerate() async {
     final encoded = QrEncoder.encode(widget.formType, _fieldValues);
@@ -39,7 +41,10 @@ class _GenerateQrScreenState extends ConsumerState<GenerateQrScreen> {
       );
       return;
     }
-    setState(() => _generatedContent = encoded);
+    setState(() {
+      _generatedContent = encoded;
+      _currentStep = 2;
+    });
     await _saveCreatedQrCode(encoded);
   }
 
@@ -86,7 +91,7 @@ class _GenerateQrScreenState extends ConsumerState<GenerateQrScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const QrGenerationStepIndicator(currentStep: 1),
+              QrGenerationStepIndicator(currentStep: _currentStep),
               const SizedBox(height: 24),
               QrInputForm(
                 formType: widget.formType,
@@ -131,6 +136,9 @@ class _GenerateQrScreenState extends ConsumerState<GenerateQrScreen> {
                           await SharePlus.instance.share(
                             ShareParams(text: _generatedContent!),
                           );
+                          setState(() {
+                            _currentStep = 3;
+                          });
                         },
                         icon: const Icon(Icons.share_rounded),
                         label: const Text('Share QR'),
@@ -154,6 +162,9 @@ class _GenerateQrScreenState extends ConsumerState<GenerateQrScreen> {
                               content: Text('Copied to clipboard'),
                             ),
                           );
+                          setState(() {
+                            _currentStep = 3;
+                          });
                         },
                         icon: const Icon(Icons.copy_rounded),
                         label: const Text('Copy Original Text'),

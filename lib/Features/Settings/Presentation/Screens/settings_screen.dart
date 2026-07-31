@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proscan/Core/Themes/app_themes.dart';
-//import 'package:proscan/Core/Utils/navigation_bar_index.dart';
+import 'package:proscan/Features/Settings/Presentation/Providers/beep_notifier.dart';
 import 'package:proscan/Features/Settings/Presentation/Widgets/app_logo_card.dart';
 import 'package:proscan/Features/Settings/Presentation/Widgets/list_tile.dart';
 import 'package:proscan/Features/Settings/Presentation/Widgets/settings_section_card.dart';
-//import 'package:proscan/Shared/Providers/BottomNav_selectedIndexProvider/selected_index_provider.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -18,7 +17,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    //final indexReader = ref.read(selectedIndexProvider.notifier);
+    final isBeepEnabled = ref.watch(beepProvider);
+
     return SafeArea(
       child: CustomScrollView(
         slivers: [
@@ -47,7 +47,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       leadingIcon: Icons.volume_up_rounded,
                       title: 'Beep',
                       subtitle: 'Play a sound after a successful scan.',
-                      trailing: Switch(value: true, onChanged: (_) {}),
+                      trailing: Switch(
+                        value: isBeepEnabled,
+                        onChanged: (_) {
+                          ref.read(beepProvider.notifier).toggleBeepState();
+                        },
+                      ),
                     ),
                     SettingsListTile(
                       leadingIcon: Icons.content_copy_rounded,

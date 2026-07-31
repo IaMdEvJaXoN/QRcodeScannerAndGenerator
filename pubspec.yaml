@@ -52,6 +52,8 @@ dependencies:
   url_launcher: ^6.3.2
   app_settings: ^8.0.3
   gal: ^2.3.3
+  shared_preferences: ^2.5.5
+  audioplayers: ^6.8.1
 
 
 dev_dependencies:
@@ -86,6 +88,33 @@ flutter:
     - assets/successful.json
     - assets/Error animation.json
     - assets/cant_open_http.json
+    - assets/sounds/click.mp3
+    - assets/sounds/scan_detected_sound.mp3
+    - assets/afternoon_json/Hello with Waving Hand.json
+    - assets/afternoon_json/Hello, Hi.json
+    - assets/afternoon_json/Hello.json
+    - assets/afternoon_json/HiWelcome.json
+    - assets/evening_json/cat halloween.json
+    - assets/evening_json/evening.json
+    - assets/evening_json/Flow 10.json
+    - assets/evening_json/Hello with Waving Hand.json
+    - assets/evening_json/Hello.json
+    - assets/morning_json/E V E.json
+    - assets/morning_json/Good Morning with Sun.json
+    - assets/morning_json/Good Morning.json
+    - assets/morning_json/robot.json
+    - assets/morning_json/time clock.json
+    - assets/nights_json/Background Full Screen-Night.json
+    - assets/nights_json/E V E.json
+    - assets/nights_json/Good night.json
+    - assets/nights_json/Hello.json
+    - assets/nights_json/json.json
+    - assets/nights_json/Sleepy Moon.json
+    - assets/nights_json/Weather-night.json
+
+
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
