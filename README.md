@@ -2,16 +2,20 @@
 
 QR code scanner and generator application
 
-## Getting Started
+## Details
+-This flutter app has the scan QR code and create QR code features.
+  -The scan QR code feature uses the Mobile scanner package to detect qr codes and spit  out the result as strings.The mobile scanner is also used to analyze images from the  phone gallery by detecting qr codes in them.Images in the phone gallery are accessed  using the image picker flutter package.After detection the decoded content is  displayed in subsequent screen and also saved in Hive storage.
+-The create Qr feature utilizes the flutter_qr package to generate Qr codes from the user input(text). The generated codes can optionally be saved to phone gallery via the the gal package after using the RepaintBoundary widget and a global key which identifies the widget in the widget tree.
 
-This project is a starting point for a Flutter application.
+-Storage of data
+   -Hive
+   -Shared Preferences
 
-A few resources to get you started if this is your first Flutter project:
+-Architechture used
+    -clean architecture with riverpod providers
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Running the app
+ -Clone the repository.
+ -Make sure flutter SDK is installed on your computer
+ -open app in an IDE e.g VS code.
+ -Run flutter pub get to link the dependencies in pubspec.yaml to the app.
